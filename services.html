@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services | Namo AI Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Space+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=29">
+    <style>
+        .service-page-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .service-detail-card {
+            background: rgba(10, 10, 10, 0.85); /* Slightly more solid for better performance */
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px); /* Reduced from 10px */
+            transition: var(--transition-smooth);
+            will-change: transform;
+            contain: layout;
+        }
+        .service-detail-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-accent);
+        }
+        .service-icon-large {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Global Background Video -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="images/Black_and_White_Blackhole_Background_Video.mp4" type="video/mp4">
+    </video>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><span>N</span>amo AI Digital</a>
+
+            <!-- Nav Toggle Button -->
+            <button class="nav-toggle hover-target" id="nav-toggle">
+                <div class="hamburger"></div>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link hover-target">Home</a></li>
+                <li><a href="about.html" class="nav-link hover-target">About</a></li>
+                <li><a href="services.html" class="nav-link hover-target active">Services</a></li>
+                <li><a href="team.html" class="nav-link hover-target">Team</a></li>
+                <li><a href="contact.html" class="nav-link hover-target">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary btn-animated hover-target">
+                <div class="svg-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="css-i6dzq1">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </div>
+                <span>Get Started</span>
+            </a>
+        </div>
+    </nav>
+
+    <section class="section-padding" style="margin-top: 80px;">
+        <div class="container">
+            <div class="section-header reveal">
+                <h1 class="hero-title"><span class="text-gradient">Our Expertise</span></h1>
+                <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto;">We provide specialized digital solutions tailored for exponential growth and premium brand positioning.</p>
+            </div>
+
+            <div class="service-page-grid">
+                <!-- Website Development -->
+                <div class="service-detail-card reveal">
+                    <div class="service-icon-large">🌐</div>
+                    <h3 class="text-gradient">Website Development</h3>
+                    <p style="color: var(--text-muted);">We build lightning-fast, highly-scalable, and deeply SEO-optimized web structures. From high-conversion landing pages to complex corporate platforms, our custom code architectures ensure flawless pixel-perfect execution.</p>
+                    <ul style="color: var(--text-muted); margin-top: 20px; list-style: none;">
+                        <li>• Custom React & Next.js Apps</li>
+                        <li>• High-Performance E-commerce</li>
+                        <li>• Responsive Enterprise Portals</li>
+                    </ul>
+                </div>
+
+                <!-- App Development -->
+                <div class="service-detail-card reveal">
+                    <div class="service-icon-large">📱</div>
+                    <h3 class="text-gradient">App Development</h3>
+                    <p style="color: var(--text-muted);">Transform ambitious concepts into powerful native iOS and Android environments. We specialize in robust, intuitive mobile interactions paired with secure cloud-backend syncing.</p>
+                    <ul style="color: var(--text-muted); margin-top: 20px; list-style: none;">
+                        <li>• Native iOS & Android</li>
+                        <li>• Cross-Platform Flutter/React Native</li>
+                        <li>• Scalable Backend Integration</li>
+                    </ul>
+                </div>
+
+                <!-- Digital Marketing -->
+                <div class="service-detail-card reveal">
+                    <div class="service-icon-large">📈</div>
+                    <h3 class="text-gradient">Digital Marketing</h3>
+                    <p style="color: var(--text-muted);">Dominate search rankings and command attention. We deploy aggressive, data-validated marketing frameworks combining advanced SEO and competitive growth strategies.</p>
+                    <ul style="color: var(--text-muted); margin-top: 20px; list-style: none;">
+                        <li>• Advanced SEO Strategies</li>
+                        <li>• ROI-Focused Growth Hacking</li>
+                        <li>• Competitive Market Analysis</li>
+                    </ul>
+                </div>
+
+                <!-- UI/UX Design -->
+                <div class="service-detail-card reveal">
+                    <div class="service-icon-large">✨</div>
+                    <h3 class="text-gradient">UI/UX Design</h3>
+                    <p style="color: var(--text-muted);">Architect aesthetic interfaces that addict the user. We map complex user-flow psychology into beautiful, frictionless wireframes—turning casual scrolling into unbreakable devotion.</p>
+                    <ul style="color: var(--text-muted); margin-top: 20px; list-style: none;">
+                        <li>• High-Fidelity Prototypes</li>
+                        <li>• User Journey Mapping</li>
+                        <li>• Design Systems (Figma)</li>
+                    </ul>
+                </div>
+
+                <!-- Social Media Management -->
+                <div class="service-detail-card reveal">
+                    <div class="service-icon-large">📣</div>
+                    <h3 class="text-gradient">Social Media Management</h3>
+                    <p style="color: var(--text-muted);">Influence the culture. Our elite social strategists craft high-engagement content architectures that authentically echo your brand voice. We build fierce community loyalty and drive viral amplification.</p>
+                    <ul style="color: var(--text-muted); margin-top: 20px; list-style: none;">
+                        <li>• Viral Content Strategy</li>
+                        <li>• Community Engagement</li>
+                        <li>• Multi-Platform Domination</li>
+                    </ul>
+                </div>
+
+                <!-- Performance Marketing -->
+                <div class="service-detail-card reveal">
+                    <div class="service-icon-large">🎯</div>
+                    <h3 class="text-gradient">Performance Marketing</h3>
+                    <p style="color: var(--text-muted);">Target precision hyper-growth. Through relentless A/B testing and exact-match paid ad ecosystems across Meta and Google, we guarantee every dollar spent returns measurable, scalable acquisition.</p>
+                    <ul style="color: var(--text-muted); margin-top: 20px; list-style: none;">
+                        <li>• Paid Search & Social Ads</li>
+                        <li>• Conversion Rate Optimization</li>
+                        <li>• Data-Driven Analytics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: 50px 0; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); text-align: center;">
+        <p style="color: var(--text-muted);">&copy; 2024 Namo AI Digital. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="js/main.js?v=30"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Namo AI Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Space+Mono&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css?v=29">
+</head>
+
+<body>
+    <!-- Global Background Video -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="images/Black_and_White_Blackhole_Background_Video.mp4" type="video/mp4">
+    </video>
+
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo"><span>N</span>amo AI Digital</a>
+
+            <!-- Nav Toggle Button -->
+            <button class="nav-toggle hover-target" id="nav-toggle">
+                <div class="hamburger"></div>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link hover-target">Home</a></li>
+                <li><a href="about.html" class="nav-link hover-target">About</a></li>
+                <li><a href="services.html" class="nav-link hover-target">Services</a></li>
+                <li><a href="team.html" class="nav-link hover-target">Team</a></li>
+                <li><a href="contact.html" class="nav-link hover-target active">Contact</a></li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary btn-animated hover-target">
+                <div class="svg-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="css-i6dzq1">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </div>
+                <span>Get Started</span>
+            </a>
+        </div>
+    </nav>
+
+    <section id="contact" class="section-padding" style="margin-top: 80px;">
+        <div class="container">
+            <div class="section-header reveal">
+                <h1 class="hero-title">Start a <span class="text-gradient">Project</span></h1>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Ready to dominate the digital landscape? Let's talk about your vision.</p>
+            </div>
+
+            <div class="contact-wrapper" style="margin-top: 50px;">
+                <div class="contact-form-container reveal-left">
+                    <form id="contact-form" class="glass-panel" style="padding: 40px; border-radius: 20px;">
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label for="form-name">Full Name</label>
+                                <input type="text" id="form-name" class="form-control" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="form-email">Email Address</label>
+                                <input type="email" id="form-email" class="form-control" placeholder="john@example.com" required>
+                            </div>
+                        </div>
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                            <div class="form-group">
+                                <label for="form-mobile">Mobile Number</label>
+                                <input type="tel" id="form-mobile" class="form-control" placeholder="+91 00000 00000" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="form-location">Location</label>
+                                <input type="text" id="form-location" class="form-control" placeholder="City, Country" required>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="form-service">Service Required</label>
+                            <select id="form-service" class="form-control">
+                                <option value="Website Development">Website Development</option>
+                                <option value="App Development">App Development</option>
+                                <option value="Digital Marketing">Digital Marketing</option>
+                                <option value="Social Media Management">Social Media Management</option>
+                                <option value="Performance Marketing">Performance Marketing</option>
+                                <option value="UI/UX Design">UI/UX Design</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="form-message">Your Vision</label>
+                            <textarea id="form-message" class="form-control" rows="5" placeholder="Tell us about your project goals..." required></textarea>
+                        </div>
+                        <button type="submit" id="submit-btn" class="btn btn-primary btn-animated hover-target" style="width: 100%; margin-top: 30px;">
+                            <span>Send Message ➔</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="padding: 50px 0; background: rgba(0,0,0,0.5); border-top: 1px solid var(--glass-border); text-align: center;">
+        <p style="color: var(--text-muted);">&copy; 2024 Namo AI Digital. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="js/main.js?v=29"></script>
+</body>
+</html>

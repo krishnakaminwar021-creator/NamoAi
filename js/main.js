@@ -81,15 +81,17 @@ const initApp = () => {
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    navToggle.addEventListener('click', () => {
-        body.classList.toggle('nav-collapsed');
-        navBar.classList.toggle('collapsed');
-        if (!navBar.classList.contains('collapsed')) {
-            body.style.overflow = 'hidden';
-        } else {
-            body.style.overflow = '';
-        }
-    });
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            body.classList.toggle('nav-collapsed');
+            navBar.classList.toggle('collapsed');
+            if (!navBar.classList.contains('collapsed')) {
+                body.style.overflow = 'hidden';
+            } else {
+                body.style.overflow = '';
+            }
+        });
+    }
 
     // Close nav when clicking a link on mobile
     document.querySelectorAll('.nav-link, .nav-container .btn').forEach(link => {
@@ -104,73 +106,119 @@ const initApp = () => {
 
     // 1. STAGGERED HEADLINE ANIMATION
     const headline = document.querySelector('.hero-title');
-    // Exclude the span with text-gradient from splitting to preserve HTML structure
-    const textNodes = Array.from(headline.childNodes).filter(node => node.nodeType === 3);
-    textNodes.forEach(node => {
-        const text = node.textContent;
-        if (text.trim() === '') return;
+    if (headline) {
+        // Exclude the span with text-gradient from splitting to preserve HTML structure
+        const textNodes = Array.from(headline.childNodes).filter(node => node.nodeType === 3);
+        textNodes.forEach(node => {
+            const text = node.textContent;
+            if (text.trim() === '') return;
 
-        let charIndex = 0;
-        const splitText = text.split(/(\s+)/).map(word => {
-            if (word.trim() === '') {
-                charIndex += word.length;
-                return word;
+            let charIndex = 0;
+            const splitText = text.split(/(\s+)/).map(word => {
+                if (word.trim() === '') {
+                    charIndex += word.length;
+                    return word;
+                }
+                return `<span style="white-space: nowrap;">` + word.split('').map(char => {
+                    const delay = charIndex * 0.05;
+                    charIndex++;
+                    return `<span class="char" style="animation-delay: ${delay}s">${char}</span>`;
+                }).join('') + `</span>`;
+            }).join('');
+
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = splitText;
+            headline.insertBefore(tempDiv, node);
+            headline.removeChild(node);
+
+            // Unwrap the div
+            while (tempDiv.firstChild) {
+                headline.insertBefore(tempDiv.firstChild, tempDiv);
             }
-            return `<span style="white-space: nowrap;">` + word.split('').map(char => {
-                const delay = charIndex * 0.05;
-                charIndex++;
-                return `<span class="char" style="animation-delay: ${delay}s">${char}</span>`;
-            }).join('') + `</span>`;
-        }).join('');
-
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = splitText;
-        headline.insertBefore(tempDiv, node);
-        headline.removeChild(node);
-
-        // Unwrap the div
-        while (tempDiv.firstChild) {
-            headline.insertBefore(tempDiv.firstChild, tempDiv);
-        }
-        headline.removeChild(tempDiv);
-    });
-
-    // Make the span letters fade in too
-    const gradientSpan = headline.querySelector('.text-gradient');
-    if (gradientSpan) {
-        const spanText = gradientSpan.textContent;
-        let charIndex = 0;
-        const splitSpan = spanText.split(/(\s+)/).map(word => {
-            if (word.trim() === '') {
-                charIndex += word.length;
-                return word;
-            }
-            return `<span style="white-space: nowrap;">` + word.split('').map(char => {
-                const delay = (charIndex * 0.05) + 0.5;
-                charIndex++;
-                return `<span class="char" style="animation-delay: ${delay}s">${char}</span>`;
-            }).join('') + `</span>`;
-        }).join('');
-        gradientSpan.innerHTML = splitSpan;
+            headline.removeChild(tempDiv);
+        });
     }
 
-    // Magnetic Buttons
+    // Make the span letters fade in too
+    if (headline) {
+        const gradientSpan = headline.querySelector('.text-gradient');
+        if (gradientSpan) {
+            const spanText = gradientSpan.textContent;
+            let charIndex = 0;
+            const splitSpan = spanText.split(/(\s+)/).map(word => {
+                if (word.trim() === '') {
+                    charIndex += word.length;
+                    return word;
+                }
+                return `<span style="white-space: nowrap;">` + word.split('').map(char => {
+                    const delay = (charIndex * 0.05) + 0.5;
+                    charIndex++;
+                    return `<span class="char" style="animation-delay: ${delay}s">${char}</span>`;
+                }).join('') + `</span>`;
+            }).join('');
+            gradientSpan.innerHTML = splitSpan;
+        }
+    }
+
+    // 2. ACTIVE NAV LINK HIGHLIGHTING
+    try {
+        const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+        document.querySelectorAll('.nav-link').forEach(link => {
+            const linkPath = link.getAttribute('href');
+            if (linkPath === currentPath) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    } catch (e) { console.warn("Nav highlighting failed", e); }
+
+    // Magnetic Buttons - Optimized with RequestAnimationFrame
     const magnetBtns = document.querySelectorAll('.magnet-btn');
     magnetBtns.forEach(btn => {
         let rect = null;
+        let requestId = null;
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+
+        const updatePosition = () => {
+            // Smooth interpolation (lerp) for extra silkiness
+            currentX += (targetX - currentX) * 0.15;
+            currentY += (targetY - currentY) * 0.15;
+            
+            btn.style.transform = `translate(${currentX}px, ${currentY}px)`;
+            
+            if (Math.abs(targetX - currentX) > 0.1 || Math.abs(targetY - currentY) > 0.1) {
+                requestId = requestAnimationFrame(updatePosition);
+            } else {
+                requestId = null;
+            }
+        };
+
         btn.addEventListener('mouseenter', function () {
             rect = this.getBoundingClientRect();
-        });
+        }, { passive: true });
+
         btn.addEventListener('mousemove', function (e) {
             if (!rect) rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            this.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-        });
+            targetX = (e.clientX - rect.left - rect.width / 2) * 0.35;
+            targetY = (e.clientY - rect.top - rect.height / 2) * 0.35;
+            
+            if (!requestId) {
+                requestId = requestAnimationFrame(updatePosition);
+            }
+        }, { passive: true });
+
         btn.addEventListener('mouseleave', function () {
             rect = null;
-            this.style.transform = 'translate(0px, 0px)';
-        });
+            targetX = 0;
+            targetY = 0;
+            if (!requestId) {
+                requestId = requestAnimationFrame(updatePosition);
+            }
+        }, { passive: true });
     });
 
     // 3 & 4. OPTIMIZED HIGH-PERFORMANCE SCROLL OBSERVER
@@ -181,19 +229,24 @@ const initApp = () => {
         scrollProgress.style.transformOrigin = 'left center';
     }
 
+    let isScrolled = false;
     lenis.on('scroll', (e) => {
-        // Task A: Scroll Progress Bar
+        // Task A: Scroll Progress Bar - Throttled by JS frame
         if (scrollProgress) {
             scrollProgress.style.transform = `scaleX(${e.progress})`;
         }
 
-        // Task B: Navbar Glass Transition
-        if (e.animatedScroll > 50) {
-            navbar.classList.add('scrolled');
-            document.body.classList.add('scrolled-toggles');
-        } else {
-            navbar.classList.remove('scrolled');
-            document.body.classList.remove('scrolled-toggles');
+        // Task B: Navbar Glass Transition - Guarded state to prevent redundant DOM updates
+        const shouldBeScrolled = e.animatedScroll > 50;
+        if (shouldBeScrolled !== isScrolled) {
+            isScrolled = shouldBeScrolled;
+            if (isScrolled) {
+                navbar.classList.add('scrolled');
+                document.body.classList.add('scrolled-toggles');
+            } else {
+                navbar.classList.remove('scrolled');
+                document.body.classList.remove('scrolled-toggles');
+            }
         }
     });
 
@@ -204,13 +257,11 @@ const initApp = () => {
         threshold: 0.15
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries, observerInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-            } else if (entry.boundingClientRect.top > 0) {
-                // Remove active class to allow re-trigger on scroll ONLY when scrolling back above
-                entry.target.classList.remove('active');
+                observerInstance.unobserve(entry.target); // Stop tracking once revealed for smoothness
             }
         });
     }, observerOptions);
@@ -273,6 +324,7 @@ const initApp = () => {
     // 6.5 INTERACTIVE 3D CAROUSEL (Click to spread & Drag to rotate)
     const carouselWrapper = document.querySelector('.carousel-wrapper');
     const carouselInner = document.querySelector('.carousel-inner');
+    const revertBtn = document.querySelector('.revert-stack-btn');
 
     if (carouselWrapper && carouselInner) {
         let isDragging = false;
@@ -288,6 +340,7 @@ const initApp = () => {
             // Only toggle on the empty space or prompt, handle dragging cleanly
             if (!carouselWrapper.classList.contains('carousel-active')) {
                 carouselWrapper.classList.add('carousel-active');
+                if (revertBtn) revertBtn.innerText = 'Stack Cards';
                 // Reset rotation when opening
                 baseRotateY = 0;
                 currentRotateY = 0;
@@ -296,11 +349,21 @@ const initApp = () => {
         });
 
         // Revert to Stack logic
-        const revertBtn = document.querySelector('.revert-stack-btn');
         if (revertBtn) {
+            // Set initial text based on state
+            revertBtn.innerText = carouselWrapper.classList.contains('carousel-active') ? 'Stack Cards' : 'Unstack Cards';
+            
             revertBtn.addEventListener('click', (e) => {
                 e.stopPropagation(); // prevent wrapper click from instantly re-opening
-                carouselWrapper.classList.remove('carousel-active');
+                const isActive = carouselWrapper.classList.contains('carousel-active');
+                
+                if (isActive) {
+                    carouselWrapper.classList.remove('carousel-active');
+                    revertBtn.innerText = 'Unstack Cards';
+                } else {
+                    carouselWrapper.classList.add('carousel-active');
+                    revertBtn.innerText = 'Stack Cards';
+                }
 
                 // CRUCIAL BUG FIX: Snap the container rotation back to 0 so the stack isn't viewed from behind!
                 baseRotateY = 0;
@@ -309,8 +372,10 @@ const initApp = () => {
                 carouselInner.style.transform = `perspective(1500px) rotateX(-5deg) rotateY(0deg)`;
 
                 // Optional but highly aesthetic: auto-unflip any flipped cards when stacking
-                const flippedCards = carouselWrapper.querySelectorAll('.flip-card.flipped');
-                flippedCards.forEach(card => card.classList.remove('flipped'));
+                if (!isActive) { // if transitioning to stacked
+                    const flippedCards = carouselWrapper.querySelectorAll('.flip-card.flipped');
+                    flippedCards.forEach(card => card.classList.remove('flipped'));
+                }
             });
         }
 
@@ -394,18 +459,8 @@ const initApp = () => {
                             counter.innerText = target;
                             counter.animationComplete = true;
                         }
-                    };
+                     };
                     updateCounter();
-                });
-            } else if (entry.boundingClientRect.top > 0) {
-                // Reset counters to 0 to re-trigger on next scroll ONLY when scrolling back above
-                const counters = entry.target.querySelectorAll('.counter');
-                counters.forEach(counter => {
-                    counter.animationComplete = false;
-                    if (counter.animationId) {
-                        cancelAnimationFrame(counter.animationId);
-                    }
-                    counter.innerText = '0';
                 });
             }
         });
@@ -488,6 +543,303 @@ const initApp = () => {
                 contactForm.reset();
             }, 600); // Tiny delay so user feels the "Connecting..." interaction
         });
+    }
+
+    // 11. TEAM MEMBERS LOGIC
+    const teamGrid = document.getElementById('team-grid');
+    const openTeamModalBtn = document.getElementById('open-team-modal-btn');
+    const toggleTeamViewBtn = document.getElementById('toggle-team-view-btn');
+    const teamModal = document.getElementById('team-modal');
+    const closeTeamModal = document.querySelector('.custom-modal-close');
+    const addTeamForm = document.getElementById('add-team-form');
+
+    const loadTeamMembers = () => {
+        if (!teamGrid) return;
+        const members = JSON.parse(localStorage.getItem('namoai_team_members')) || [];
+        
+        teamGrid.innerHTML = ''; 
+        if (members.length === 0) {
+            teamGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center; margin-top: 20px;">No team members added yet.</p>';
+        }
+
+        members.forEach((member, index) => {
+            const card = document.createElement('div');
+            card.className = `flip-card founder-card reveal active`;
+            card.style.transitionDelay = `${(index % 4) * 0.1}s`;
+            const infoText = member.info ? member.info : 'Digital Expert at Namo AI.';
+            card.innerHTML = `
+                <div class="flip-card-inner">
+                    <div class="flip-card-front" style="padding: 40px 40px 85px 40px; text-align: left; align-items: flex-start; justify-content: space-between;">
+                        <div class="stars">★★★★★</div>
+                        <p class="quote">"${infoText}"</p>
+                        <div class="client-info" style="margin-top:20px;">
+                            <div class="client-avatar"><img src="${member.image}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👤</text></svg>'" alt="${member.name}" style="width: 70px; height: 70px; min-width: 70px; min-height: 70px; object-fit: cover; border-radius: 50%;"></div>
+                            <div>
+                                <div class="client-name">${member.name}</div>
+                                <div class="client-position">${member.role}</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm flip-trigger hover-target" style="position: absolute; bottom: 30px; right: 30px; transform: translateZ(25px); padding: 8px 15px; font-size: 0.8rem;">Contact ➔</button>
+                    </div>
+                    <div class="flip-card-back">
+                        <div class="client-avatar" style="margin-bottom: 20px; width:90px; height:90px;"><img src="${member.image}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👤</text></svg>'" style="width: 90px; height: 90px; object-fit: cover; border-radius: 50%;"></div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 5px; transform: translateZ(25px);">${member.name}</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 20px; transform: translateZ(25px);">${member.role}</p>
+                        <div style="display: flex; gap: 15px; justify-content: center; transform: translateZ(30px);">
+                             <a href="mailto:${member.email}" class="social-icon-btn hover-target" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm flip-close hover-target" style="margin-top: 20px; transform: translateZ(25px); padding: 8px 15px;">✕ Close</button>
+                    </div>
+                </div>
+            `;
+            teamGrid.appendChild(card);
+            observer.observe(card);
+        });
+
+        // re-run flip listeners
+        const newFlipTriggers = teamGrid.querySelectorAll('.flip-trigger');
+        const newFlipCloses = teamGrid.querySelectorAll('.flip-close');
+        
+        newFlipTriggers.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const c = btn.closest('.flip-card');
+                if (c) c.classList.add('flipped');
+            });
+        });
+        
+        newFlipCloses.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const c = btn.closest('.flip-card');
+                if (c) c.classList.remove('flipped');
+            });
+        });
+    };
+
+    window.editTeamMember = (index) => {
+        const password = prompt("Enter Admin Password to edit:");
+        if (password !== 'Prathsaw@24') {
+            alert('Incorrect Admin Password!');
+            return;
+        }
+
+        const members = JSON.parse(localStorage.getItem('namoai_team_members')) || [];
+        const member = members[index];
+        
+        if (member) {
+            document.getElementById('tm-name').value = member.name;
+            document.getElementById('tm-role').value = member.role;
+            document.getElementById('tm-email').value = member.email || '';
+            document.getElementById('tm-info').value = member.info || '';
+            document.getElementById('tm-index').value = index;
+            document.getElementById('modal-title-action').innerText = 'Edit';
+            document.getElementById('tm-submit-btn').querySelector('span').innerText = 'Update Member';
+            
+            if (teamModal) teamModal.classList.add('show');
+        }
+    };
+
+    if (teamModal && closeTeamModal) {
+        closeTeamModal.addEventListener('click', () => {
+            teamModal.classList.remove('show');
+            resetTeamForm();
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === teamModal) {
+                teamModal.classList.remove('show');
+                resetTeamForm();
+            }
+        });
+
+        function resetTeamForm() {
+            if (addTeamForm) addTeamForm.reset();
+            document.getElementById('tm-index').value = "-1";
+            document.getElementById('modal-title-action').innerText = 'Add';
+            document.getElementById('tm-submit-btn').querySelector('span').innerText = 'Save Member';
+        }
+    }
+
+    if (toggleTeamViewBtn && teamGrid) {
+        let viewMembersClickCount = 0;
+        let viewMembersClickTimer = null;
+
+        toggleTeamViewBtn.addEventListener('click', (e) => {
+            // If it's a link (like on index.html), let it navigate UNLESS we are doing secret taps
+            const isLink = toggleTeamViewBtn.tagName === 'A';
+            
+            // Secret 5-Click Easter Egg for Admin Modal
+            viewMembersClickCount++;
+            
+            clearTimeout(viewMembersClickTimer);
+            
+            if (viewMembersClickCount === 5) {
+                if (teamModal) {
+                    e.preventDefault(); // Don't navigate if achieving secret tap
+                    teamModal.classList.add('show');
+                    viewMembersClickCount = 0;
+                    return; 
+                }
+            }
+
+            // If it's on a page with a hideable grid (MPA might just want it visible)
+            viewMembersClickTimer = setTimeout(() => {
+                if (viewMembersClickCount > 0 && viewMembersClickCount < 5) {
+                    // Only toggle if we are actually on a page that supports toggling (like team.html)
+                    if (!isLink || toggleTeamViewBtn.getAttribute('href') === '#team' || toggleTeamViewBtn.getAttribute('href') === 'team.html') {
+                        // If it's a relative link to another page, let it navigate
+                        if (isLink && toggleTeamViewBtn.getAttribute('href').includes('.html') && window.location.pathname.includes('index.html')) {
+                            return; // Let normal navigation happen
+                        }
+
+                        e.preventDefault();
+                        const isHidden = teamGrid.style.display === 'none' || teamGrid.style.display === '';
+                        
+                        if (isHidden) {
+                            teamGrid.style.display = 'grid';
+                            toggleTeamViewBtn.innerText = 'HIDE MEMBERS';
+                        } else {
+                            teamGrid.style.display = 'none';
+                            toggleTeamViewBtn.innerText = 'VIEW ALL MEMBERS';
+                        }
+                    }
+                }
+                viewMembersClickCount = 0; 
+            }, 350);
+        });
+    }
+
+    if (addTeamForm) {
+        // Auto-fill Information based on Job Role
+        const roleInput = document.getElementById('tm-role');
+        const infoInput = document.getElementById('tm-info');
+        
+        if (roleInput && infoInput) {
+            const roleInfoMap = {
+                'developer': 'Building robust, scalable, and high-performance technical solutions.',
+                'engineer': 'Engineering scalable, secure, and advanced software architectures.',
+                'designer': 'Crafting intuitive, aesthetic, and user-centered digital experiences.',
+                'ui/ux': 'Designing aesthetic interfaces and seamless digital experiences.',
+                'manager': 'Driving strategic goals and empowering teams to deliver excellence.',
+                'product': 'Guiding product vision and ensuring successful go-to-market strategies.',
+                'marketing': 'Creating impactful campaigns that elevate brand presence and engagement.',
+                'sales': 'Connecting clients with value-driven solutions to foster business growth.',
+                'finance': 'Ensuring financial health and strategic resource allocation.',
+                'legal': 'Safeguarding operations with robust compliance and legal foresight.',
+                'hr': 'Cultivating a thriving workplace culture and championing talent.',
+                'support': 'Providing exceptional assistance and ensuring customer success.',
+                'content': 'Creating compelling narratives that engage and inspire audiences.',
+                'default': 'Passionate about innovation and delivering outstanding results.'
+            };
+
+            roleInput.addEventListener('input', (e) => {
+                const currentRole = e.target.value.toLowerCase().trim();
+                let matchedInfo = '';
+                
+                if (currentRole === '') {
+                    // Clear info if it was auto-generated and role is cleared
+                    const currentInfo = infoInput.value;
+                    const isPreviousAuto = Object.values(roleInfoMap).includes(currentInfo);
+                    if (isPreviousAuto || currentInfo === '') infoInput.value = '';
+                    return;
+                }
+                
+                for (const [key, value] of Object.entries(roleInfoMap)) {
+                    if (currentRole.includes(key)) {
+                        matchedInfo = value;
+                        break;
+                    }
+                }
+                
+                if (!matchedInfo) matchedInfo = roleInfoMap['default'];
+                
+                const currentInfo = infoInput.value;
+                const isPreviousDefaultOrEmpty = currentInfo === '' || Object.values(roleInfoMap).includes(currentInfo);
+                
+                if (isPreviousDefaultOrEmpty) {
+                    infoInput.value = matchedInfo;
+                }
+            });
+        }
+
+        addTeamForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const password = document.getElementById('tm-password').value;
+            if (password !== 'Prathsaw@24') {
+                alert('Incorrect Admin Password!');
+                return;
+            }
+
+            const name = document.getElementById('tm-name').value;
+            const role = document.getElementById('tm-role').value;
+            const email = document.getElementById('tm-email').value;
+            const info = document.getElementById('tm-info').value;
+            const index = parseInt(document.getElementById('tm-index').value);
+            const fileInput = document.getElementById('tm-image-file');
+
+            const saveMember = (imageData) => {
+                try {
+                    const members = JSON.parse(localStorage.getItem('namoai_team_members')) || [];
+                    const memberData = { name, role, email, info, image: imageData };
+                    
+                    if (index === -1) {
+                        members.push(memberData);
+                    } else {
+                        // Keep old image if no new one uploaded during edit
+                        if (!imageData) memberData.image = members[index].image;
+                        members[index] = memberData;
+                    }
+                    
+                    localStorage.setItem('namoai_team_members', JSON.stringify(members));
+                    teamModal.classList.remove('show');
+                    resetTeamForm();
+                    loadTeamMembers();
+                } catch (err) {
+                    alert('Local Storage limit reached. Try using a smaller image.');
+                    console.error('Storage Quota error: ', err);
+                }
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_SIZE = 250;
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        if (width > height && width > MAX_SIZE) {
+                            height *= MAX_SIZE / width;
+                            width = MAX_SIZE;
+                        } else if (height > MAX_SIZE) {
+                            width *= MAX_SIZE / height;
+                            height = MAX_SIZE;
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        saveMember(compressedBase64);
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                if (index !== -1) {
+                    saveMember(null); // Edit without changing image
+                } else {
+                    alert("Please select an image for the new member.");
+                }
+            }
+        });
+        
+        loadTeamMembers();
     }
 };
 

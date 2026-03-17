@@ -557,14 +557,19 @@ const initApp = () => {
         if (!teamGrid) return;
         const members = JSON.parse(localStorage.getItem('namoai_team_members')) || [];
         
-        teamGrid.innerHTML = ''; 
-        if (members.length === 0) {
-            teamGrid.innerHTML = '<p style="color: var(--text-muted); grid-column: 1 / -1; text-align: center; margin-top: 20px;">No team members added yet.</p>';
+        const dynamicMembers = teamGrid.querySelectorAll('.dynamic-member');
+        dynamicMembers.forEach(m => m.remove());
+        
+        const noTeamMsg = teamGrid.querySelector('.no-team-msg');
+        if (noTeamMsg) noTeamMsg.remove();
+
+        if (members.length === 0 && teamGrid.children.length === 0) {
+            teamGrid.innerHTML = '<p class="no-team-msg" style="color: var(--text-muted); grid-column: 1 / -1; text-align: center; margin-top: 20px;">No team members added yet.</p>';
         }
 
         members.forEach((member, index) => {
             const card = document.createElement('div');
-            card.className = `flip-card founder-card reveal active`;
+            card.className = `flip-card founder-card reveal active dynamic-member`;
             card.style.transitionDelay = `${(index % 4) * 0.1}s`;
             const infoText = member.info ? member.info : 'Digital Expert at Namo AI.';
             card.innerHTML = `

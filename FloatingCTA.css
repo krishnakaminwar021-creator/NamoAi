@@ -1,0 +1,266 @@
+.floating-cta-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  font-family: "Inter", sans-serif;
+}
+
+/* Modal Backdrop */
+.floating-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: -1;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Floating Trigger Button */
+.floating-btn {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gradient);
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(91, 140, 255, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.25s ease,
+              background 0.25s ease,
+              border-color 0.25s ease;
+}
+
+.floating-btn:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.floating-btn:active {
+  transform: scale(0.96);
+}
+
+/* Ambient glow under the button */
+.btn-ambient-glow {
+  position: absolute;
+  inset: -4px;
+  background: var(--gradient);
+  filter: blur(8px);
+  opacity: 0.45;
+  border-radius: 50%;
+  z-index: -1;
+  transition: opacity 0.25s ease;
+}
+
+.floating-btn:hover .btn-ambient-glow {
+  opacity: 0.65;
+}
+
+/* Pulsing Badge notification */
+.btn-pulse-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 12px;
+  height: 12px;
+  background-color: #ef4444;
+  border: 2px solid var(--bg, #07070a);
+  border-radius: 50%;
+  animation: pulseBadge 2s infinite;
+}
+
+@keyframes pulseBadge {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.floating-btn svg {
+  transition: transform 0.25s ease;
+}
+
+.floating-btn.active svg {
+  transform: rotate(90deg);
+}
+
+/* Active State — gradient maintained when open */
+.floating-btn.active {
+  background: var(--gradient);
+  border: none;
+  box-shadow: 0 8px 30px rgba(91, 140, 255, 0.45),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.floating-btn.active:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.floating-btn.active .btn-pulse-badge {
+  display: none;
+}
+
+/* Glassmorphic Dropdown Menu — Pure Black */
+.floating-menu {
+  position: absolute;
+  bottom: 72px;
+  right: 0;
+  width: 290px;
+  background: #000000 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.45) !important;
+  padding: 20px;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+.menu-header {
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.menu-header h4 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.menu-header .muted {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-link-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.menu-link-item:hover {
+  transform: scale(1.03);
+  background: #111111;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.link-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.whatsapp .link-icon {
+  color: #ffffff;
+}
+
+.calendly .link-icon {
+  color: #ffffff;
+}
+
+.link-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.link-title {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.link-desc {
+  font-size: 10.5px;
+  color: var(--text-muted);
+}
+
+.menu-footer {
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  text-align: center;
+}
+
+.menu-footer a {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.menu-footer a:hover {
+  color: var(--text);
+}
+
+/* Animations */
+.animate-popup {
+  animation: popupReveal 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform-origin: bottom right;
+}
+
+@keyframes popupReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Responsiveness for floating widget */
+@media (max-width: 480px) {
+  .floating-cta-container {
+    bottom: 16px;
+    right: 16px;
+  }
+  .floating-menu {
+    width: 270px;
+    right: 0;
+  }
+}

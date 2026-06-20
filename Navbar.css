@@ -1,0 +1,418 @@
+/* ============================================
+   Navbar — Clean Fixed Version (UPDATED)
+   ============================================ */
+
+.nav-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  z-index: 1001;
+
+  padding: 18px 24px;
+  transition: padding 0.4s var(--ease-out);
+}
+
+.nav-scrolled {
+  padding: 10px 24px;
+}
+
+/* Main Navbar */
+.nav {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  height: 60px;
+  padding: 6px 20px;
+
+  border-radius: 999px;
+
+  background: rgba(8, 8, 14, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+  transition: all 0.4s var(--ease-out);
+}
+
+.nav-wrap.nav-scrolled .nav {
+  background: rgba(5, 5, 10, 0.85);
+  border-color: rgba(255, 255, 255, 0.08);
+
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(91, 140, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+/* =========================
+   BRAND (FIXED)
+========================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+/* unified logo sizing */
+.brand .logo,
+.brand .brand-mark {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+/* image logo */
+.brand .logo {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* text logo */
+.brand .brand-mark {
+  display: grid;
+  place-items: center;
+
+  background: linear-gradient(135deg, #3b6bff, #8b5cf6);
+  color: #fff;
+
+  border-radius: 10px;
+
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* brand text container */
+.brand .brand-name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.05;
+}
+
+/* main text */
+.brand .brand-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  letter-spacing: -0.01em;
+}
+
+/* subtitle */
+.brand .brand-dim {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--accent-1);
+  text-transform: uppercase;
+  white-space: nowrap;
+  letter-spacing: 0.15em;
+  margin-top: 1px;
+}
+
+/* =========================
+   NAV LINKS
+========================= */
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-link {
+  position: relative;
+  padding: 7px 14px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-radius: 999px;
+  border: 1px solid transparent;
+  transition: all 0.25s var(--ease-out);
+}
+
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav-link.active {
+  color: #fff;
+  background: rgba(91, 140, 255, 0.08);
+  border-color: rgba(91, 140, 255, 0.15);
+}
+
+.nav-underline {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--gradient);
+  border-radius: 999px;
+  transition: width 0.3s var(--ease-out);
+}
+
+.nav-link:hover .nav-underline,
+.nav-link.active .nav-underline {
+  width: 50%;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Icon Button */
+.icon-btn {
+  width: 36px;
+  height: 36px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 999px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+
+  cursor: pointer;
+
+  transition: all 0.25s var(--ease-out);
+}
+
+.icon-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-only {
+  display: none;
+}
+
+.burger {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.burger span {
+  width: 18px;
+  height: 1.8px;
+  background: currentColor;
+  border-radius: 10px;
+  transition: all 0.3s var(--ease-out);
+}
+
+.burger.open span:first-child {
+  transform: translateY(3.4px) rotate(45deg);
+}
+
+.burger.open span:last-child {
+  transform: translateY(-3.4px) rotate(-45deg);
+}
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  padding: 90px 24px 40px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  background: rgba(5, 5, 8, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  transform: translateY(-12px);
+  opacity: 0;
+
+  transition: transform 0.4s var(--ease-out), opacity 0.4s var(--ease-out);
+
+  pointer-events: none;
+  overflow-y: auto;
+}
+
+.mobile-menu-open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-link {
+  padding: 18px 24px;
+  border-radius: 16px;
+
+  color: var(--text-muted);
+  font-size: 19px;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid transparent;
+  transition: all 0.25s var(--ease-out);
+}
+
+.mobile-link:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+}
+
+.mobile-link.active {
+  color: #fff;
+  background: rgba(91, 140, 255, 0.08);
+  border-color: rgba(91, 140, 255, 0.15);
+}
+
+/* overlay */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 880px) {
+  .nav-links {
+    display: none;
+  }
+
+  .mobile-only {
+    display: grid;
+  }
+
+  .brand .logo,
+  .brand .brand-mark {
+    width: 28px;
+    height: 28px;
+  }
+
+  .brand .brand-text {
+    font-size: 14px;
+  }
+
+  .brand .brand-dim {
+    font-size: 8.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-wrap {
+    padding: 12px 16px;
+  }
+
+  .nav-scrolled {
+    padding: 8px 16px;
+  }
+
+  .nav {
+    padding: 8px 16px;
+    gap: 12px;
+  }
+
+  .brand .logo,
+  .brand .brand-mark {
+    width: 24px;
+    height: 24px;
+  }
+
+  .brand .brand-text {
+    font-size: 12px;
+  }
+
+  .brand .brand-dim {
+    font-size: 7.5px;
+  }
+}
+
+/* =========================
+   LOGIN BUTTON
+========================= */
+
+.login-btn {
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  padding: 9px 20px;
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+
+  transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.35);
+}
+
+/* MOBILE LOGIN */
+.mobile-login-btn {
+  margin-top: 20px;
+
+  border: none;
+  cursor: pointer;
+
+  padding: 16px;
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+@media (max-width: 880px) {
+  .login-btn {
+    display: none;
+  }
+}

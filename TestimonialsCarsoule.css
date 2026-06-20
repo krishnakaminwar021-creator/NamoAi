@@ -1,0 +1,154 @@
+/* ===================================
+   TESTIMONIAL CAROUSEL (FIXED)
+=================================== */
+
+.testimonial-carousel {
+  --items: 8;
+  --card-width: 340px;
+  --card-height: 280px;
+  --gap: 24px;
+  --duration: 35s;
+
+  position: relative;
+  width: 100%;
+  height: var(--card-height);
+  overflow: hidden;
+
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 10%,
+    black 90%,
+    transparent
+  );
+}
+
+/* Pause animation on hover */
+.testimonial-carousel:hover .testimonial-slide {
+  animation-play-state: paused;
+}
+
+/* ================================
+   CARD
+================================ */
+.testimonial-slide {
+  position: absolute;
+  top: 0;
+  left: calc(100% + var(--gap));
+
+  width: var(--card-width);
+  height: var(--card-height);
+
+  box-sizing: border-box;
+
+  padding: 28px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  border-radius: 24px;
+  border: 1px solid var(--border);
+
+  background: rgba(16, 16, 24, 0.6);
+  backdrop-filter: blur(20px);
+
+  overflow: hidden;
+
+  animation: testimonialMarquee var(--duration) linear infinite;
+
+  animation-delay: calc(
+    (var(--duration) / var(--items)) * var(--i) * -1
+  );
+
+  flex-shrink: 0;
+}
+
+/* Hover effect */
+.testimonial-slide:hover {
+  border-color: var(--accent-1);
+  box-shadow: 0 20px 40px rgba(91, 140, 255, 0.15);
+}
+
+/* ================================
+   STARS
+================================ */
+.testimonial-stars {
+  color: #fbbf24;
+  font-size: 18px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+
+  flex-shrink: 0;
+}
+
+/* ================================
+   TEXT (FIXED HEIGHT)
+================================ */
+.testimonial-text {
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 15px;
+
+  height: 110px;        /* IMPORTANT: keeps all cards equal */
+  overflow: hidden;
+
+  flex-shrink: 0;
+}
+
+/* ================================
+   USER SECTION
+================================ */
+.testimonial-user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-top: 10px;
+
+  flex-shrink: 0;
+}
+
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+
+  background: var(--gradient);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+  color: white;
+
+  flex-shrink: 0;
+}
+
+.testimonial-user h4 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.testimonial-user span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+/* ================================
+   ANIMATION
+================================ */
+@keyframes testimonialMarquee {
+  100% {
+    transform: translateX(
+      calc(
+        -1 *
+        (
+          var(--items) *
+          (var(--card-width) + var(--gap))
+        )
+      )
+    );
+  }
+}

@@ -1,0 +1,242 @@
+/* ============================================
+   Namo AI Digital — Interaction styles
+   Includes premium cursor, magnet button, 3D card tilt & ripple effects
+   ============================================ */
+
+/* Custom Cursors */
+.premium-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: var(--text);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background-color 0.3s var(--ease-out);
+}
+
+.premium-cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 44px;
+  height: 44px;
+  background: radial-gradient(
+    circle,
+    rgba(91, 140, 255, 0.18) 0%,
+    rgba(139, 92, 246, 0.08) 50%,
+    transparent 100%
+  );
+  border: 1px solid rgba(91, 140, 255, 0.15);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  will-change: transform, width, height, background;
+  transition: width 0.4s var(--ease-out), height 0.4s var(--ease-out), border-color 0.4s var(--ease-out), background 0.4s var(--ease-out);
+}
+
+/* Custom Cursor Hover States */
+.cursor-hovering-link .premium-cursor-dot {
+  width: 10px;
+  height: 10px;
+  background-color: var(--accent-3);
+  mix-blend-mode: normal;
+}
+
+.cursor-hovering-link .premium-cursor-glow {
+  width: 64px;
+  height: 64px;
+  border-color: rgba(34, 211, 238, 0.4);
+  background: radial-gradient(
+    circle,
+    rgba(34, 211, 238, 0.15) 0%,
+    rgba(139, 92, 246, 0.08) 60%,
+    transparent 100%
+  );
+}
+
+/* Card hover cursor configurations */
+.cursor-hovering-card .premium-cursor-dot {
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent-1);
+}
+
+.cursor-hovering-card .premium-cursor-glow {
+  width: 80px;
+  height: 80px;
+  border-color: rgba(91, 140, 255, 0.35);
+  background: radial-gradient(
+    circle,
+    rgba(91, 140, 255, 0.22) 0%,
+    rgba(236, 72, 153, 0.08) 70%,
+    transparent 100%
+  );
+}
+
+/* Hide cursor elements on mobile/touch screens */
+@media (pointer: coarse) {
+  .premium-cursor-dot,
+  .premium-cursor-glow {
+    display: none !important;
+  }
+}
+
+/* Smart Card tilt base styling */
+.service-card,
+.why-card,
+.portfolio-card,
+.testimonial-card,
+.cta-card,
+.portfolio-link-card,
+.work-card,
+.svc-card {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.25s var(--ease-out), border-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* 3D tilt active state */
+.card-tilt-active {
+  transform: perspective(1000px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateZ(10px);
+}
+
+/* Spotlight inner glows */
+.spotlight-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    250px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(91, 140, 255, 0.08) 0%,
+    rgba(139, 92, 246, 0.04) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spotlight-glow.active {
+  opacity: 1;
+}
+
+/* Interactive Spotlight Border overlay using gradient */
+.service-card::after,
+.why-card::after,
+.portfolio-card::after,
+.testimonial-card::after,
+.portfolio-link-card::after,
+.work-card::after,
+.svc-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    280px circle at var(--mouse-x, 0px) var(--mouse-y, 0px),
+    rgba(91, 140, 255, 0.35) 0%,
+    rgba(139, 92, 246, 0.2) 40%,
+    transparent 80%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.service-card:hover::after,
+.why-card:hover::after,
+.portfolio-card:hover::after,
+.testimonial-card:hover::after,
+.portfolio-link-card:hover::after,
+.work-card:hover::after,
+.svc-card:hover::after {
+  opacity: 1;
+}
+
+/* Card child 3D depth movement */
+.service-card > *,
+.why-card > *,
+.portfolio-card > *,
+.testimonial-card > *,
+.portfolio-link-card > *,
+.work-card > *,
+.svc-card > * {
+  transform: translateZ(15px);
+}
+
+/* Magnetic Button support class */
+.btn-magnetic-wrap {
+  display: inline-block;
+  position: relative;
+  transition: transform 0.2s var(--ease-out);
+}
+
+/* Button hover feedback */
+.btn,
+.floating-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ripple Click Feedback styles */
+.ripple-span {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0);
+  animation: rippleEffect 0.6s ease-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Interactive element highlights and links */
+.text-gradient {
+  background-size: 200% auto;
+  animation: shimmerGradient 6s linear infinite;
+}
+
+@keyframes shimmerGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Pulse animation for active/badge items */
+.badge-glow {
+  position: relative;
+}
+
+.badge-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 10px var(--accent-1);
+  animation: glowPulse 2s ease-in-out infinite;
+  pointer-events: none;
+}
